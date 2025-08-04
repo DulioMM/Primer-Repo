@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - SYX</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue-router@4"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: #1e1e2f;
+      color: white;
+    }
+
+    #app {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .login-page {
+      display: flex;
+      height: 100%;
+      width: 100%;
+      position: relative;
+    }
+
+    .left-panel {
+      width: 80%;
+      height: 100%;
+      background: url('FondoFabrica.png') center center / cover no-repeat;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 0;
+    }
+
+    .right-panel {
+      width: 30%;
+      height: 100%;
+      background: #1e1e2f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 2;
+      transition: all 0.2s linear;
+    }
+
+    .right-panel.slide-left {
+      width: 100%;
+      right: 0;
+    }
+
+    .login-box {
+      width: 300px;
+      background: #2b2b3d;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: transform 0.7s linear, opacity 10s linear;
+      text-align: center;
+    }
+
+    .login-box.slide-left {
+      transform: translateX(-100vw);
+      opacity: 0;
+    }
+
+    .login-box .branding {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #5c82ff;
+    }
+
+    .login-box h2 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .login-box input, .login-box button {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .login-box input {
+      background: #3c3c4f;
+      color: white;
+    }
+
+    .login-box button {
+      background: #5c82ff;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-box button:hover {
+      background: #4a6edc;
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+    }
+
+    .forgot-password {
+      font-size: 13px;
+      color: #5c82ff;
+      text-decoration: none;
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+
+    /* este para el home */
+    .navbar {
+      background-color: #2b2b3d;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: #5c82ff;
+      text-decoration: none;
+      margin-left: 15px;
+      font-weight: bold;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .card {
+      background: #3c3c4f;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .loader {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .loader img {
+      width: 80px;
+      height: 80px;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity 0.5s ease;
+    }
+
+    .fade-enter-from, .fade-leave-to {
+      opacity: 0;
+    }
+
+    .fadein-enter-active {
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .login-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .logo-img {
+      width: 260px;
+      max-width: 80%;
+      object-fit: contain;
+      margin-top: -30px;
+      transition: transform 0.5s ease;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.05);
+    }
+    .forgot-password.register {
+      font-weight: 500;
+      margin-top: -5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
+  </div>
+
+  <script>
+    const LoginView = {
+      template: `
+        <div :class="['login-page', { 'slide-left': slide }]">
+          <div class="left-panel"></div>
+          <div :class="['right-panel', { 'slide-left': slide }]">
+              <div class="login-wrapper">
+                <img src="syx-logo.png" alt="SYX Co." class="logo-img">
+                <div :class="['login-box', { 'slide-left': slide }]">
+                  <h2><b>Iniciar Sesión</b></h2>
+                  <input v-model="username" placeholder="Usuario" />
+                  <input v-model="password" type="password" placeholder="Contraseña" />
+                  <div class="remember-row">
+                    <input type="checkbox" v-model="remember" id="remember">
+                    <label for="remember">Recordar</label>
+                  </div>
+                  <button @click="login">Entrar</button>
+                  <a href="recovery.html" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                  <a href="register.html" class="forgot-password register">¿No tienes cuenta? Regístrate</a>
+                </div>
+              </div>
+            </div>
+      `,
+      data() {
+        return {
+          username: '',
+          password: '',
+          remember: false,
+          slide: false
+        };
+      },
+      methods: {
+        login() {
+          if (this.username && this.password) {
+            this.slide = true;
+            if (this.remember) {
+              localStorage.setItem('rememberedUser', this.username);
+            } else {
+              localStorage.removeItem('rememberedUser');
+            }
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('username', this.username);
+            setTimeout(() => {
+              this.$router.push('/home');
+            }, 1200);
+          } else {
+            alert('Ingresa usuario y contraseña');
+          }
+        }
+      },
+      mounted() {
+        const remembered = localStorage.getItem('rememberedUser');
+        if (remembered) {
+          this.username = remembered;
+          this.remember = true;
+        }
+      }
+    };
+
+    const HomeView = {
+      template: `
+        <transition name="fadein" appear>
+          <div>
+            <div class="navbar">
+              <h1>Bienvenido, {{ user }} :)</h1>
+              <div>
+                <a href="#" @click.prevent="reloadContent">Inicio</a>
+                <router-link @click="logout" to="/">Salir</router-link>
+              </div>
+            </div>
+
+            <div class="content">
+              <div v-if="loading" class="loader">
+                <img src="loader.gif" alt="Cargando..." />
+              </div>
+              <transition name="fade">
+                <div v-else class="card" key="content">
+                  <h2>JemerySYX -</h2>
+                  <p>Pienso hacer algo como un twitter? no se algo q tenga como weas como si fuera tu feed o q te aparezcan cosas para rellenar sabes? y q vayas bajando y bajando. Quizas con unos botones mas por arriba o los lados como mensajes.</p>
+                </div>
+              </transition>
+            </div>
+          </div>
+        </transition>
+      `,
+      data() {
+        return {
+          user: localStorage.getItem('username') || 'Usuario',
+          loading: false
+        };
+      },
+      methods: {
+        logout() {
+          localStorage.removeItem('loggedIn');
+          localStorage.removeItem('username');
+        },
+        reloadContent() {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
+        }
+      }
+    };
+
+    const routes = [
+      { path: '/', component: LoginView },
+      { path: '/home', component: HomeView, meta: { requiresAuth: true } }
+    ];
+
+    const router = VueRouter.createRouter({
+      history: VueRouter.createWebHashHistory(),
+      routes
+    });
+
+    router.beforeEach((to, from, next) => {
+      const loggedIn = localStorage.getItem('loggedIn') === 'true';
+      if (to.meta.requiresAuth && !loggedIn) {
+        next('/');
+      } else {
+        next();
+      }
+    });
+
+    const app = Vue.createApp({});
+    app.use(router);
+    app.mount('#app');
+  </script>
+</body>
+</html>

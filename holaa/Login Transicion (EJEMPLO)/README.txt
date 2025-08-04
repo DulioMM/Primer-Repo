@@ -1,0 +1,3 @@
+Aqui unas instrucciones... dea era re básico askljdsak solo ábrelo justo en index.html para q te mande a la pagina de inicio q es lo q se quiere ver ósea el login ya lo demás lo hice para q se vea bonito y tenga sentido, para q no este tan vacio po, aunq ya con la base de datos q vas a agregar tu quizas se pueda hacer algo mucho mejor tipo como subir cosas a la pagina y asi.
+
+(Si ese logo.png lo hice yo)

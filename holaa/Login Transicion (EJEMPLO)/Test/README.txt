@@ -1,0 +1,1 @@
+En esta carpeta mas que todo iba a poner archivos como este png q tenia en mente cuando cree el Login por primera vez, ahora q lo cambie en vez de borrarlo lo guardo aqui, quien sabe en el futuro quiero actualizar o cambiar algo y ya lo q no sirve se guarda aqui por si quiero reutilizarlo luego.
