@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -134,7 +135,6 @@
       text-decoration: underline;
     }
 
-    /* este para el home */
     .navbar {
       background-color: #2b2b3d;
       padding: 15px 20px;
@@ -199,6 +199,7 @@
         transform: translateY(0);
       }
     }
+
     .login-wrapper {
       display: flex;
       flex-direction: column;
@@ -218,9 +219,23 @@
     .logo-img:hover {
       transform: scale(1.05);
     }
+
     .forgot-password.register {
       font-weight: 500;
       margin-top: -5px;
+    }
+
+    .error {
+      border: 1px solid #ff5555 !important;
+    }
+
+    .error-text {
+      color: #ff5555;
+      font-size: 12px;
+      margin-top: -10px;
+      margin-bottom: -5px;
+      text-align: left;
+      padding-left: 5px;
     }
   </style>
 </head>
@@ -241,8 +256,10 @@
                 <img src="syx-logo.png" alt="SYX Co." class="logo-img">
                 <div :class="['login-box', { 'slide-left': slide }]">
                   <h2><b>Iniciar Sesión</b></h2>
-                  <input v-model="username" placeholder="Usuario" />
-                  <input v-model="password" type="password" placeholder="Contraseña" />
+                  <input v-model="username" placeholder="Usuario" :class="{ error: showUserError }" />
+                  <span v-if="showUserError" class="error-text">Campo obligatorio</span>
+                  <input v-model="password" type="password" placeholder="Contraseña" :class="{ error: showPassError }" />
+                  <span v-if="showPassError" class="error-text">Campo obligatorio</span>
                   <div class="remember-row">
                     <input type="checkbox" v-model="remember" id="remember">
                     <label for="remember">Recordar</label>
@@ -259,12 +276,16 @@
           username: '',
           password: '',
           remember: false,
-          slide: false
+          slide: false,
+          showUserError: false,
+          showPassError: false
         };
       },
       methods: {
         login() {
-          if (this.username && this.password) {
+          this.showUserError = this.username.trim() === '';
+          this.showPassError = this.password.trim() === '';
+          if (!this.showUserError && !this.showPassError) {
             this.slide = true;
             if (this.remember) {
               localStorage.setItem('rememberedUser', this.username);
@@ -276,8 +297,6 @@
             setTimeout(() => {
               this.$router.push('/home');
             }, 1200);
-          } else {
-            alert('Ingresa usuario y contraseña');
           }
         }
       },
@@ -301,7 +320,6 @@
                 <router-link @click="logout" to="/">Salir</router-link>
               </div>
             </div>
-
             <div class="content">
               <div v-if="loading" class="loader">
                 <img src="loader.gif" alt="Cargando..." />

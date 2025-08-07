@@ -93,6 +93,10 @@
       color: white;
     }
 
+    .register-box input.error {
+      border: 1px solid #ff5555;
+    }
+
     .register-box button {
       background: #5c82ff;
       color: white;
@@ -102,6 +106,13 @@
 
     .register-box button:hover {
       background: #4a6edc;
+    }
+
+    .error-text {
+      font-size: 12px;
+      color: #ff5555;
+      margin-top: -10px;
+      display: none;
     }
 
     .back-to-login {
@@ -123,13 +134,75 @@
       <img src="syx-logo.png" alt="SYX Co." class="logo-img">
       <div class="register-box">
         <h2>Crear Cuenta</h2>
-        <input type="text" placeholder="Nombre de usuario" />
-        <input type="email" placeholder="Correo electrónico" />
-        <input type="password" placeholder="Contraseña" />
-        <button>Registrarse</button>
+        <input id="username" type="text" placeholder="Nombre de usuario" />
+        <span class="error-text" id="userError">Campo obligatorio</span>
+
+        <input id="email" type="email" placeholder="Correo electrónico" />
+        <span class="error-text" id="emailError">Campo obligatorio</span>
+
+        <input id="password" type="password" placeholder="Contraseña" />
+        <span class="error-text" id="passError">Campo obligatorio</span>
+
+        <button onclick="validateRegister()">Registrarse</button>
         <a href="index.html" class="back-to-login">¿Ya tienes cuenta? Inicia sesión</a>
       </div>
     </div>
   </div>
+
+  <script>
+    function validateRegister() {
+      const username = document.getElementById('username');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+
+      const userError = document.getElementById('userError');
+      const emailError = document.getElementById('emailError');
+      const passError = document.getElementById('passError');
+
+      let valid = true;
+
+      // esto valida el usuario
+      if (username.value.trim() === '') {
+        username.classList.add('error');
+        userError.style.display = 'block';
+        valid = false;
+      } else {
+        username.classList.remove('error');
+        userError.style.display = 'none';
+      }
+
+      // esto valida el correo
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (email.value.trim() === '') {
+        email.classList.add('error');
+        emailError.innerText = 'Campo obligatorio';
+        emailError.style.display = 'block';
+        valid = false;
+      } else if (!emailRegex.test(email.value.trim())) {
+        email.classList.add('error');
+        emailError.innerText = 'Correo inválido';
+        emailError.style.display = 'block';
+        valid = false;
+      } else {
+        email.classList.remove('error');
+        emailError.style.display = 'none';
+      }
+
+      // esto valida la contra
+      if (password.value.trim() === '') {
+        password.classList.add('error');
+        passError.style.display = 'block';
+        valid = false;
+      } else {
+        password.classList.remove('error');
+        passError.style.display = 'none';
+      }
+
+      if (valid) {
+        alert('Formulario válido. Aquí se procesaría el registro.');
+        // se mandaria a base de datos 
+      }
+    }
+  </script>
 </body>
 </html>

@@ -77,6 +77,21 @@
     .recovery-box input {
       background: #3c3c4f;
       color: white;
+      outline: none;
+      border: 2px solid transparent;
+      transition: border 0.3s;
+    }
+
+    .recovery-box input.error {
+      border: 2px solid #ff4d4d;
+    }
+
+    .error-text {
+      color: #ff4d4d;
+      font-size: 13px;
+      text-align: left;
+      margin-top: -10px;
+      margin-bottom: 5px;
     }
 
     .recovery-box button {
@@ -108,11 +123,38 @@
       <img src="syx-logo.png" alt="SYX Co." class="logo-img">
       <div class="recovery-box">
         <h2>Recuperar Contraseña</h2>
-        <input type="email" placeholder="Ingresa tu correo" />
-        <button>Enviar código de verificación</button>
+        <input id="email" type="email" placeholder="Ingresa tu correo" />
+        <div id="errorText" class="error-text" style="display: none;">Campo obligatorio</div>
+        <button onclick="validateEmail()">Enviar código de verificación</button>
         <a href="index.html" class="back-link">Volver al inicio de sesión</a>
       </div>
     </div>
   </div>
+
+<script>
+  function validateEmail() {
+    const emailInput = document.getElementById('email');
+    const errorText = document.getElementById('errorText');
+    const email = emailInput.value.trim();
+
+    // expresiones
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === '') {
+      emailInput.classList.add('error');
+      errorText.innerText = 'Campo obligatorio';
+      errorText.style.display = 'block';
+    } else if (!emailRegex.test(email)) {
+      emailInput.classList.add('error');
+      errorText.innerText = 'Correo inválido';
+      errorText.style.display = 'block';
+    } else {
+      emailInput.classList.remove('error');
+      errorText.style.display = 'none';
+      alert('Código enviado a tu correo');
+      // aqui va la logica para poder mandar el correo pero como es ejemplo pues eso.
+    }
+  }
+</script>
 </body>
 </html>
