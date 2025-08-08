@@ -237,6 +237,43 @@
       text-align: left;
       padding-left: 5px;
     }
+
+    .main-layout {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      
+    }
+
+    .sidebar li {
+      height: 80px;
+      align-content:space-evenly
+    }
+
+    .sidebar li a {
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+    .sidebar li:hover{
+      background-color: #00000026;
+      transition: background-color 0.5s ease, color 0.3s ease;
+      
+    }
+
   </style>
 </head>
 <body>
@@ -310,49 +347,69 @@
     };
 
     const HomeView = {
-      template: `
-        <transition name="fadein" appear>
+  template: `
+    <transition name="fadein" appear>
+      <div>
+        <div class="navbar">
+          <h1>Bienvenido, {{ user }} :)</h1>
           <div>
-            <div class="navbar">
-              <h1>Bienvenido, {{ user }} :)</h1>
-              <div>
-                <a href="#" @click.prevent="reloadContent">Inicio</a>
-                <router-link @click="logout" to="/">Salir</router-link>
-              </div>
-            </div>
-            <div class="content">
-              <div v-if="loading" class="loader">
-                <img src="loader.gif" alt="Cargando..." />
-              </div>
-              <transition name="fade">
-                <div v-else class="card" key="content">
-                  <h2>JemerySYX -</h2>
-                  <p>Pienso hacer algo como un twitter? no se algo q tenga como weas como si fuera tu feed o q te aparezcan cosas para rellenar sabes? y q vayas bajando y bajando. Quizas con unos botones mas por arriba o los lados como mensajes.</p>
-                </div>
-              </transition>
-            </div>
+            <a href="#" @click.prevent="reloadContent">Inicio</a>
+            <router-link @click="logout" to="/">Salir</router-link>
           </div>
-        </transition>
-      `,
-      data() {
-        return {
-          user: localStorage.getItem('username') || 'Usuario',
-          loading: false
-        };
-      },
-      methods: {
-        logout() {
-          localStorage.removeItem('loggedIn');
-          localStorage.removeItem('username');
-        },
-        reloadContent() {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-          }, 1000);
-        }
-      }
+        </div>
+
+        <!-- NUEVA ESTRUCTURA -->
+        <div class="main-layout">
+          <!-- Sidebar lateral -->
+          <div class="sidebar">
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">Notificaciones</a></li>
+              <li><a href="#">Perfil</a></li>
+              <li><a href="#">Modulos</a></li>
+              <li><a href="#">Sílabos</a></li>
+              <li><a href="#">Fichas</a></li>
+              <li><a href="#">Horario</a></li>
+              <li><a href="#">Configuración</a></li>
+            </ul>
+          </div>
+
+          <!-- Contenido principal -->
+          <div class="content">
+            <div v-if="loading" class="loader">
+              <img src="loader.gif" alt="Cargando..." />
+            </div>
+            <transition name="fade">
+              <div v-else class="card" key="content">
+                <h2>JemerySYX -</h2>
+                <p>Pienso hacer algo como un twitter? no se algo q tenga como weas como si fuera tu feed...</p>
+              </div>
+            </transition>
+          </div>
+        </div>
+      </div>
+    </transition>
+  `,
+  data() {
+    return {
+      user: localStorage.getItem('username') || 'Usuario',
+      loading: false
     };
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('username');
+    },
+    reloadContent() {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 1000);
+    }
+  }
+};
+
 
     const routes = [
       { path: '/', component: LoginView },
